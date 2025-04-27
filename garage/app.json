@@ -1,0 +1,71 @@
+{
+  "configVersion": "v3",
+  "app": {
+    "appId": 1078665,
+    "appName": "Garage",
+    "appType": "app",
+    "version": {
+      "code": 100,
+      "name": "1.0.0"
+    },
+    "icon": "icon.png",
+    "vender": "Igor Khudiakov",
+    "description": "Maintenance app"
+  },
+  "permissions": [
+    "data:os.device.info",
+    "device:os.local_storage",
+    "device:os.notification",
+    "device:os.bg_service"
+  ],
+  "runtime": {
+    "apiVersion": {
+      "compatible": "3.5.0",
+      "target": "3.5.0",
+      "minVersion": "3.5.0"
+    }
+  },
+  "debug": true,
+  "targets": {
+    "common": {
+      "module": {
+        "page": {
+          "pages": [
+            "page/index",
+            "page/editparam",
+            "page/settings",
+            "page/appinfo"
+          ]
+        },
+        "app-service": {
+          "services": [
+            "app-service/index"
+          ]
+        },
+        "app-side": {
+          "path": "app-side/index"
+        },
+        "setting": {
+          "path": "setting/index"
+        }
+      },
+      "platforms": [
+        {
+          "st": "r"
+        },
+        {
+          "st": "s"
+        }
+      ]
+    }
+  },
+  "i18n": {
+    "en-US": {
+      "appName": "Garage"
+    },
+    "ru-RU": {
+      "appName": "Гараж"
+    }
+  },
+  "defaultLanguage": "en-US"
+}

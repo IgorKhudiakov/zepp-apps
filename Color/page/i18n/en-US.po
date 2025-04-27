@@ -1,0 +1,37 @@
+Главная страница
+msgid "colorSchemes"
+msgstr "Color Schemes"
+msgid "textExample"
+msgstr "Text"
+msgid "removeText"
+msgstr "Delete the color scheme %s?"
+
+Страница редактирования
+msgid "bgdesc"
+msgstr "Background"
+msgid "fgdesc"
+msgstr "Foreground"
+msgid "textdesc"
+msgstr "Text"
+
+Как использовать
+msgid "faq"
+msgstr "How it use"
+
+Инфо
+msgid "appinfo"
+msgstr "App Info"
+msgid "name"
+msgstr "Name"
+msgid "version"
+msgstr "Version"
+msgid "vender"
+msgstr "Vender"
+msgid "email"
+msgstr "E-mail"
+msgid "tglink"
+msgstr "Author Telegram"
+msgid "description"
+msgstr "Description"
+msgid "donate"
+msgstr "Donate"

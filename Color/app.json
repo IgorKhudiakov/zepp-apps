@@ -1,0 +1,58 @@
+{
+  "configVersion": "v3",
+  "app": {
+    "appId": 1079849,
+    "appName": "Colors Preview",
+    "appType": "app",
+    "version": {
+      "code": 110,
+      "name": "1.1.0"
+    },
+    "icon": "icon.png",
+    "vender": "Igor Khudiakov",
+    "description": "Color preview application"
+  },
+  "permissions": [
+    "data:os.device.info", "device:os.local_storage"
+  ],
+  "runtime": {
+    "apiVersion": {
+      "compatible": "3.0.0",
+      "target": "3.0.0",
+      "minVersion": "3.0"
+    }
+  },
+  "targets": {
+    "default": {
+      "module": {
+        "page": {
+          "pages": [
+            "page/index",
+            "page/view",
+            "page/faq",
+            "page/info"
+          ]
+        }
+      },
+      "platforms": [
+        {
+          "st": "r",
+          "dw": 480
+        },
+        {
+          "st": "s",
+          "dw": 390
+        }
+      ]
+    }
+  },
+  "i18n": {
+    "en-US": {
+      "appName": "Colors Preview"
+    },
+    "ru-RU": {
+      "appName": "Предпросмотр цвета"
+    }
+  },
+  "defaultLanguage": "en-US"
+}

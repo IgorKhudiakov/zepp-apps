@@ -1,0 +1,37 @@
+Главная страница
+msgid "colorSchemes"
+msgstr "Цветовые схемы"
+msgid "textExample"
+msgstr "Текст"
+msgid "removeText"
+msgstr "Удалить цветовую схему %s?"
+
+Страница редактирования
+msgid "bgdesc"
+msgstr "Задний план"
+msgid "fgdesc"
+msgstr "Передний план"
+msgid "textdesc"
+msgstr "Текст"
+
+Как использовать
+msgid "faq"
+msgstr "Как использовать"
+
+Инфо
+msgid "appinfo"
+msgstr "О приложении"
+msgid "name"
+msgstr "Название"
+msgid "version"
+msgstr "Версия"
+msgid "vender"
+msgstr "Разработчик"
+msgid "email"
+msgstr "E-mail"
+msgid "tglink"
+msgstr "Телеграм автора"
+msgid "description"
+msgstr "Описание"
+msgid "donate"
+msgstr "Поддержать"
