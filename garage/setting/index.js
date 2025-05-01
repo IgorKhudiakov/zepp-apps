@@ -40,24 +40,64 @@ AppSettingsPage({
         data.details = Object.fromEntries(entries)
         this.editTransport(dataIndex, data)
     },
-    getColors() {
-        const params = Array.from(COLORS.accentArray, (color) => {
-            return {
-                name: gettext(color),
-                value: color
-            }
-        })
-        params.push({
-            name: gettext("own"),
-            value: "own"
-        })
-        return params
-    },
     build(props) {
         this.setProps(props)
         const items = []
         const detailsParams = TRANSPORT_DETAILS_PARAMS
         this.data.transport.forEach((e, i) => {
+            const numberColors = []
+            for (let c = 0; c < COLORS.carnum.bg.length; c++) {
+                numberColors.push(
+                    Button({
+                        label: e.carnum.num,
+                        style: {
+                            height: '2em',
+                            borderRadius: '.25em',
+                            background: `#${COLORS.carnum.bg[c]}`,
+                            border: `2px solid ${e.carnum.color == c ? '#00B9BC' : 'transparent'}`,
+                            boxShadow: 'none',
+                            color: `#${COLORS.carnum.text[c]}`,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            paddingTop: '.6em',
+                            fontWeight: 'bold'
+                        },
+                        onClick: () => {
+                            e.carnum.color = c
+                            this.editTransport(i, e)
+                        }
+                    })
+                )
+            }
+            const colors = []
+            let colLen = COLORS.accentArray.length
+            for (let c = 0; c <= colLen; c++) {
+                colors.push(
+                    Button({
+                        label: c == colLen ? '◐' : ' ',
+                        style: {
+                            minWidth: '1.5em',
+                            height: '1.5em',
+                            borderRadius: '50%',
+                            background: c == colLen ? 'transparent' : `#${COLORS.accentArray[c]}`,
+                            boxShadow: 'none',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            padding: '0',
+                            border: `2px solid ${c == colLen ? e.accent.isCustom ? '#00B9BC' : 'gray' : c < colLen && !e.accent.isCustom && e.accent.color == COLORS.accentArray[c] ? '#00B9BC' : 'transparent'}`,
+                            fontSize: '1.5em',
+                            color: 'white'
+                        },
+                        onClick: () => {
+                            e.accent.isCustom = c == colLen
+                            if (c < colLen) e.accent.color = COLORS.accentArray[c]
+                            this.editTransport(i, e)
+                        }
+                    })
+                )
+            }
             for (const key in detailsParams) {
                 if (e.details[key] == undefined) e.details[key] = detailsParams[key]
             }
@@ -136,7 +176,7 @@ AppSettingsPage({
                                             style: {
                                                 flex: "1",
                                                 fontSize: "1.2em",
-                                                filter: "hue-rotate(205deg)"
+                                                filter: "hue-rotate(204deg) saturate(4.4)"
                                             }
                                         },
                                         Toggle({
@@ -392,7 +432,7 @@ AppSettingsPage({
                                     display: 'flex',
                                     flexDirection: 'row',
                                     flexWrap: 'wrap',
-                                    gap: '.5em'
+                                    gap: '.5em 1em'
                                 }
                             },
                             [
@@ -401,7 +441,7 @@ AppSettingsPage({
                                     {
                                         style: {
                                             width: '100%',
-                                            filter: "hue-rotate(205deg)"
+                                            filter: "hue-rotate(204deg) saturate(4.4)"
                                         }
                                     },
                                     Toggle({
@@ -430,7 +470,7 @@ AppSettingsPage({
                                                 fontSize: '1.2em'
                                             },
                                             onChange: (val) => {
-                                                e.carnum.num = validator(val, undefined, 6)
+                                                e.carnum.num = validator(val, undefined, 11)
                                                 this.editTransport(i, e)
                                             }
                                         })
@@ -457,6 +497,242 @@ AppSettingsPage({
                                                 this.editTransport(i, e)
                                             }
                                         })
+                                    ]
+                                ),
+                                View(
+                                    {
+                                        style: {
+                                            width: '100%',
+                                            display: e.carnum.visible ? 'flex' : 'none',
+                                            flexDirection: 'column',
+                                            gap: '.5em'
+                                        }
+                                    },
+                                    [
+                                        gettext("regNumColor"),
+                                        View(
+                                            {
+                                                style: {
+                                                    display: 'flex',
+                                                    flexWrap: 'wrap',
+                                                    gap: '.25em .5em',
+                                                    fontSize: '1.2em'
+                                                }
+                                            },
+                                            [
+                                                ...numberColors
+                                            ]
+                                        )
+                                    ]
+                                ),
+                                View(
+                                    {
+                                        style: {
+                                            width: '100%',
+                                            display: e.carnum.visible ? 'flex' : 'none',
+                                            flexDirection: 'column',
+                                            gap: '.5em'
+                                        }
+                                    },
+                                    [
+                                        gettext("regNumFormat"),
+                                        View(
+                                            {
+                                                style: {
+                                                    display: 'flex',
+                                                    gap: '.5em'
+                                                }
+                                            },
+                                            [
+                                                View(
+                                                    {
+                                                        style: {
+                                                            display: 'flex',
+                                                            gap: '.1em',
+                                                            flex: '1',
+                                                            fontSize: '1.2em',
+                                                            fontWeight: 'bold',
+                                                            color: `#${COLORS.carnum.text[e.carnum.color]}`
+                                                        }
+                                                    },
+                                                    [
+                                                        View(
+                                                            {
+                                                                style: {
+                                                                    display: 'flex',
+                                                                    justifyContent: 'center',
+                                                                    alignItems: 'center',
+                                                                    borderRadius: '.25em .1em .1em .25em',
+                                                                    background: `#${COLORS.carnum.bg[e.carnum.color]}`,
+                                                                    padding: '0 .25em'
+                                                                }
+                                                            },
+                                                            e.carnum.num
+                                                        ),
+                                                        View(
+                                                            {
+                                                                style: {
+                                                                    display: 'flex',
+                                                                    justifyContent: 'center',
+                                                                    alignItems: 'center',
+                                                                    borderRadius: '.1em .25em .25em .1em',
+                                                                    background: `#${COLORS.carnum.bg[e.carnum.color]}`,
+                                                                    padding: '0 .25em'
+                                                                }
+                                                            },
+                                                            e.carnum.reg
+                                                        )
+                                                    ]
+                                                ),
+                                                Button({
+                                                    label: e.carnum.format == 1 ? '◉' : '⭘',
+                                                    style: {
+                                                        height: '1.2em',
+                                                        borderRadius: '1em',
+                                                        background: 'none',
+                                                        boxShadow: 'none',
+                                                        color: e.carnum.format == 1 ? '#00B9BC' : 'gray',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        fontSize: '1.5em',
+                                                        padding: '0',
+                                                        minWidth: '1.2em'
+                                                    },
+                                                    onClick: () => {
+                                                        e.carnum.format = 1
+                                                        this.editTransport(i, e)
+                                                    }
+                                                })
+                                            ]
+                                        ),
+                                        View(
+                                            {
+                                                style: {
+                                                    display: 'flex',
+                                                    gap: '.5em'
+                                                }
+                                            },
+                                            [
+                                                View(
+                                                    {
+                                                        style: {
+                                                            display: 'flex',
+                                                            gap: '.1em',
+                                                            flex: '1',
+                                                            fontSize: '1.2em',
+                                                            fontWeight: 'bold',
+                                                            color: `#${COLORS.carnum.text[e.carnum.color]}`
+                                                        }
+                                                    },
+                                                    [
+                                                        View(
+                                                            {
+                                                                style: {
+                                                                    display: 'flex',
+                                                                    justifyContent: 'center',
+                                                                    alignItems: 'center',
+                                                                    borderRadius: '.25em .1em .1em .25em',
+                                                                    background: `#${COLORS.carnum.bg[e.carnum.color]}`,
+                                                                    padding: '0 .25em'
+                                                                }
+                                                            },
+                                                            e.carnum.reg
+                                                        ),
+                                                        View(
+                                                            {
+                                                                style: {
+                                                                    display: 'flex',
+                                                                    justifyContent: 'center',
+                                                                    alignItems: 'center',
+                                                                    borderRadius: '.1em .25em .25em .1em',
+                                                                    background: `#${COLORS.carnum.bg[e.carnum.color]}`,
+                                                                    padding: '0 .25em'
+                                                                }
+                                                            },
+                                                            e.carnum.num
+                                                        )
+                                                    ]
+                                                ),
+                                                Button({
+                                                    label: e.carnum.format == 2 ? '◉' : '⭘',
+                                                    style: {
+                                                        height: '1.2em',
+                                                        borderRadius: '1em',
+                                                        background: 'none',
+                                                        boxShadow: 'none',
+                                                        color: e.carnum.format == 2 ? '#00B9BC' : 'gray',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        fontSize: '1.5em',
+                                                        padding: '0',
+                                                        minWidth: '1.2em'
+                                                    },
+                                                    onClick: () => {
+                                                        e.carnum.format = 2
+                                                        this.editTransport(i, e)
+                                                    }
+                                                })
+                                            ]
+                                        ),
+                                        View(
+                                            {
+                                                style: {
+                                                    display: 'flex',
+                                                    gap: '.5em'
+                                                }
+                                            },
+                                            [
+                                                View(
+                                                    {
+                                                        style: {
+                                                            display: 'flex',
+                                                            gap: '.1em',
+                                                            flex: '1',
+                                                            fontSize: '1.2em',
+                                                            fontWeight: 'bold',
+                                                            color: `#${COLORS.carnum.text[e.carnum.color]}`
+                                                        }
+                                                    },
+                                                    [
+                                                        View(
+                                                            {
+                                                                style: {
+                                                                    display: 'flex',
+                                                                    justifyContent: 'center',
+                                                                    alignItems: 'center',
+                                                                    borderRadius: '.25em',
+                                                                    background: `#${COLORS.carnum.bg[e.carnum.color]}`,
+                                                                    padding: '0 .25em'
+                                                                }
+                                                            },
+                                                            e.carnum.num
+                                                        )
+                                                    ]
+                                                ),
+                                                Button({
+                                                    label: e.carnum.format == 3 ? '◉' : '⭘',
+                                                    style: {
+                                                        height: '1.2em',
+                                                        borderRadius: '1em',
+                                                        background: 'none',
+                                                        boxShadow: 'none',
+                                                        color: e.carnum.format == 3 ? '#00B9BC' : 'gray',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        fontSize: '1.5em',
+                                                        padding: '0',
+                                                        minWidth: '1.2em'
+                                                    },
+                                                    onClick: () => {
+                                                        e.carnum.format = 3
+                                                        this.editTransport(i, e)
+                                                    }
+                                                })
+                                            ]
+                                        )
                                     ]
                                 )
                             ]
@@ -693,7 +969,8 @@ AppSettingsPage({
                                     {
                                         style: {
                                             display: "flex",
-                                            gap: "2em"
+                                            flexWrap: 'wrap',
+                                            gap: ".5em 2em"
                                         }
                                     },
                                     [
@@ -710,20 +987,13 @@ AppSettingsPage({
                                                 View(
                                                     {
                                                         style: {
-                                                            filter: "invert() hue-rotate(105deg)"
+                                                            display: 'flex',
+                                                            gap: '.5em',
+                                                            flexWrap: 'wrap'
                                                         }
                                                     },
                                                     [
-                                                        Select({
-                                                            value: e.type,
-                                                            options: this.getColors(),
-                                                            onChange: (val) => {
-                                                                if (typeof e.accent != "object") e.accent = {}
-                                                                e.accent.isCustom = val == "own"
-                                                                if (val != "own") e.accent.color = val
-                                                                this.editTransport(i, e)
-                                                            }
-                                                        })
+                                                        ...colors
                                                     ]
                                                 )
                                             ],
@@ -912,7 +1182,7 @@ AppSettingsPage({
                                         padding: "1em 2em",
                                         borderRadius: '2em',
                                         background: '#333',
-                                        color: '#00BBC1',
+                                        color: '#00B9BC',
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
@@ -971,6 +1241,9 @@ AppSettingsPage({
                                 ),
                                 Link({ source: "https://t.me/igorkhudiakov" },
                                     View({ style: { color: "white", textDecoration: "underline" } }, gettext("tglink"))
+                                ),
+                                Link({ source: "mailto:khudiakov.i.v@gmail.com" },
+                                    View({ style: { color: "white", textDecoration: "underline" } }, gettext("gmail"))
                                 ),
                                 Link({ source: "https://yoomoney.ru/to/4100119028733968/100" },
                                     View({ style: { color: "white", textDecoration: "underline" } }, gettext("donate"))

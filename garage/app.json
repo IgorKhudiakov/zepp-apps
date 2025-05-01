@@ -5,8 +5,8 @@
     "appName": "Garage",
     "appType": "app",
     "version": {
-      "code": 100,
-      "name": "1.0.0"
+      "code": 110,
+      "name": "1.1.0"
     },
     "icon": "icon.png",
     "vender": "Igor Khudiakov",
@@ -51,10 +51,12 @@
       },
       "platforms": [
         {
-          "st": "r"
+          "st": "r",
+          "dw": 480
         },
         {
-          "st": "s"
+          "st": "s",
+          "dw": 390
         }
       ]
     }

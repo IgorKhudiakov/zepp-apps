@@ -8,7 +8,7 @@ import { px } from '@zos/utils'
 import { queryPermission } from "@zos/app"
 import * as service from '@zos/app-service'
 
-import { numFormat, carNumFormat } from "../utils/formatter"
+import { numFormat } from "../utils/formatter"
 import { COLORS, SERVICE_PERMISSION } from "../utils/constants"
 import { createButtons } from '../utils/functions'
 import { Time } from '@zos/sensor'
@@ -58,18 +58,19 @@ Page(
       if (typeof options === 'string') options = JSON.parse(options)
 
       const main = {
-        M: isRoundedScreen ? 30 : 5,
-        P: 15,
-        Y: isRoundedScreen ? 100 : 50,
-        H: 130,
-        MB: 30
+        M: px(isRoundedScreen ? 36 : 5),
+        P: px(10),
+        Y: px(isRoundedScreen ? 100 : 50),
+        H: px(124),
+        MB: px(30),
+        R: px(15)
       }
       main.W = screenWidth - main.M * 2
       let contentH = main.Y
 
       var localData = localStorage.getItem('transport', [])
       if (localData.length == 0) {
-        contentH = 50
+        contentH = px(50)
         let imgPath = 'image/no_trans.png'
         let imgRect = hmUI.getImageInfo(imgPath)
         hmUI.createWidget(hmUI.widget.IMG, {
@@ -77,19 +78,19 @@ Page(
           y: contentH,
           src: imgPath
         })
-        contentH += imgRect.height + 30
+        contentH += imgRect.height + px(30)
         hmUI.createWidget(hmUI.widget.TEXT, {
           x: main.M,
           y: contentH,
           w: main.W,
-          h: 36,
+          h: px(36),
           text: getText('transportNullWatch'),
-          text_size: 28,
+          text_size: px(28),
           align_h: hmUI.align.CENTER_H,
           align_v: hmUI.align.CENTER_V,
           color: COLORS.primary
         })
-        contentH += 40
+        contentH += px(40)
         let textH = hmUI.getTextLayout(getText('newInApp'), { text_size: 24, text_width: main.W, wrapped: 1 }).height
         hmUI.createWidget(hmUI.widget.TEXT, {
           x: main.M,
@@ -97,33 +98,31 @@ Page(
           w: main.W,
           h: textH,
           text: getText('newInApp'),
-          text_size: 24,
+          text_size: px(24),
           align_h: hmUI.align.CENTER_H,
           align_v: hmUI.align.CENTER_V,
           text_style: hmUI.text_style.WRAP,
           color: COLORS.secondary
         })
-        contentH += textH + 20
+        contentH += textH + px(20)
       } else {
         const curTrans = localData[options.id ?? 0] ?? {}
         let curTransIndex = 0
         let numVisible = curTrans.carnum.visible ?? false
-        let accentColor = curTrans.accent
-          ? curTrans.accent.isCustom
-            ? curTrans.accent.customColor ?? curTrans.accent.color ?? COLORS.primary
-            : curTrans.accent.color ?? COLORS.primary
-          : COLORS.primary
+        let accentColor = curTrans.accent?.isCustom
+          ? curTrans.accent?.customColor ?? curTrans.accent?.color ?? COLORS.accentArray[0]
+          : curTrans.accent?.color ?? COLORS.accentArray[0]
         if (accentColor.length == 6) accentColor = `0x${accentColor}`
 
         const btnsG = {
-          X: main.M + 20,
+          X: main.M + px(20),
           Y: main.Y,
-          W: screenWidth - 2 * main.M - 40
+          W: screenWidth - 2 * main.M - px(40)
         }
         const transIcon = {
-          W: 60,
-          H: 30,
-          M: 20
+          W: px(60),
+          H: px(34),
+          M: px(10)
         }
         const btnsGroup = hmUI.createWidget(hmUI.widget.GROUP, {
           x: btnsG.X,
@@ -134,13 +133,23 @@ Page(
 
         let leftShadowV = false
         for (let i = 0; i < localData.length; i++) {
+          let localAccent = localData[i].accent?.isCustom
+            ? localData[i].accent?.customColor ?? localData[i].accent?.color ?? COLORS.accentArray[0]
+            : localData[i].accent?.color ?? COLORS.accentArray[0]
+          btnsGroup.createWidget(hmUI.widget.FILL_RECT, {
+            x: (transIcon.W + transIcon.M) * i + 1,
+            y: 0 + 1,
+            w: px(transIcon.W) - 2,
+            h: px(transIcon.H) - 2,
+            color: '0x' + localAccent
+          })
           btnsGroup.createWidget(hmUI.widget.BUTTON, {
             x: (transIcon.W + transIcon.M) * i,
             y: 0,
             w: px(transIcon.W),
             h: px(transIcon.H),
-            normal_src: `image/buttons/${localData[i].type}${localData[i].autoID == curTrans.autoID ? '' : '_gray'}.png`,
-            press_src: `image/buttons/${localData[i].type}.png`,
+            normal_src: `image/buttons/${localData[i].type}_mask${localData[i].autoID == curTrans.autoID ? '_normal' : ''}.png`,
+            press_src: `image/buttons/${localData[i].type}_mask${localData[i].autoID == curTrans.autoID ? '_normal' : '_dark'}.png`,
             click_func: () => {
               if (localData[i].autoID != curTrans.autoID) {
                 replace({
@@ -162,22 +171,23 @@ Page(
           }
         }
 
+        let shadowRect = hmUI.getImageInfo('image/shadow_left.png')
         if (leftShadowV) {
           hmUI.createWidget(hmUI.widget.IMG, {
-            x: 0 - (30 - main.M),
-            y: btnsG.Y - 5,
+            x: 0,
+            y: btnsG.Y - (shadowRect.height - transIcon.H) / 2,
             src: 'image/shadow_left.png'
           })
         }
         hmUI.createWidget(hmUI.widget.IMG, {
-          x: screenWidth - 100 + (30 - main.M),
-          y: btnsG.Y - 5,
+          x: screenWidth - shadowRect.width,
+          y: btnsG.Y - (shadowRect.height - transIcon.H) / 2,
           src: 'image/shadow_right.png'
         })
 
         const autoGroup = hmUI.createWidget(hmUI.widget.GROUP, {
           x: main.M,
-          y: main.Y + 50,
+          y: main.Y + px(50),
           w: main.W,
           h: main.M
         })
@@ -189,7 +199,7 @@ Page(
           h: main.H,
           color: accentColor,
           line_width: 1,
-          radius: 10
+          radius: main.R
         })
 
         let carNumW = 0
@@ -199,38 +209,38 @@ Page(
 
         if (numVisible) {
 
-          let carNumH = 30
-          let carNumP = 5
+          let carNumH = px(30)
+          let carNumP = px(5)
 
-          let carNum = carNumFormat(curTrans.carnum.num, curTrans.type)
-          let carNumReg = `${curTrans.carnum.reg}`
-          carNumW = hmUI.getTextLayout(carNum, { text_size: 24, text_width: 0 }).width + carNumP * 2
+          let carNum = (curTrans.carnum?.format ?? 1) == 2 ? curTrans.carnum.reg : curTrans.carnum.num
+          let carNumReg = (curTrans.carnum?.format ?? 1) == 2 ? curTrans.carnum.num : curTrans.carnum.reg
+          carNumW = hmUI.getTextLayout(carNum, { text_size: px(24), text_width: 0 }).width + carNumP * 2
           fullCarNumW += carNumW
-          carNumRegW = hmUI.getTextLayout(carNumReg, { text_size: 24, text_width: 0 }).width + carNumP * 2
+          if ((curTrans.carnum?.format ?? 1) <= 2) carNumRegW = hmUI.getTextLayout(carNumReg, { text_size: px(24), text_width: 0 }).width + carNumP * 2
 
           const carNumBg = autoGroup.createWidget(hmUI.widget.FILL_RECT, {
-            x: main.W - main.P - carNumW - (curTrans.type == 'scooter' ? 0 : (carNumRegW + carNumIM)),
+            x: main.W - main.P - carNumW - ((curTrans.carnum?.format ?? 1) > 2 ? 0 : (carNumRegW + carNumIM)),
             y: main.P,
             w: carNumW,
             h: carNumH,
             line_width: 1,
-            radius: 5,
-            color: COLORS.primary
+            radius: px(5),
+            color: '0x' + COLORS.carnum.bg[curTrans.carnum?.color ?? 0]
           })
           autoGroup.createWidget(hmUI.widget.TEXT, {
             x: carNumBg.getProperty(hmUI.prop.X) + carNumP,
             y: carNumBg.getProperty(hmUI.prop.Y),
             w: carNumBg.getProperty(hmUI.prop.W),
             h: carNumH,
-            text: carNum.toLowerCase(),
-            text_size: 24,
+            text: carNum,
+            text_size: px(24),
             align_h: hmUI.align.LEFT,
             align_v: hmUI.align.CENTER_V,
             text_style: hmUI.text_style.NONE,
-            color: 0x000000
+            color: '0x' + COLORS.carnum.text[curTrans.carnum?.color ?? 0]
           })
 
-          if (curTrans.type != 'scooter') {
+          if ((curTrans.carnum?.format ?? 1) <= 2) {
             fullCarNumW += carNumRegW + carNumIM
             const carNumRegBg = autoGroup.createWidget(hmUI.widget.FILL_RECT, {
               x: main.W - main.P - carNumRegW,
@@ -238,8 +248,8 @@ Page(
               w: carNumRegW,
               h: carNumH,
               line_width: 1,
-              radius: 5,
-              color: COLORS.primary
+              radius: px(5),
+              color: '0x' + COLORS.carnum.bg[curTrans.carnum?.color ?? 0]
             })
             autoGroup.createWidget(hmUI.widget.TEXT, {
               x: carNumRegBg.getProperty(hmUI.prop.X) + carNumP,
@@ -247,11 +257,11 @@ Page(
               w: carNumRegBg.getProperty(hmUI.prop.W),
               h: carNumH,
               text: carNumReg,
-              text_size: 24,
+              text_size: px(24),
               align_h: hmUI.align.LEFT,
               align_v: hmUI.align.CENTER_V,
               text_style: hmUI.text_style.NONE,
-              color: 0x000000
+              color: '0x' + COLORS.carnum.text[curTrans.carnum?.color ?? 0]
             })
           }
         }
@@ -260,9 +270,9 @@ Page(
           x: main.P,
           y: main.P,
           w: main.W - main.P * 2 - (fullCarNumW > 0 ? (main.P + fullCarNumW) : 0),
-          h: 30,
+          h: px(30),
           text: `${curTrans.name}${curTrans.model != '' ? ` ${curTrans.model}` : ''}`,
-          text_size: 24,
+          text_size: px(24),
           align_h: hmUI.align.LEFT,
           align_v: hmUI.align.CENTER_V,
           text_style: hmUI.text_style.ELLIPSIS,
@@ -281,11 +291,11 @@ Page(
         }
         autoGroup.createWidget(hmUI.widget.TEXT, {
           x: main.P,
-          y: 60,
-          w: (main.W - main.P * 4) / 2,
-          h: 24,
+          y: px(56),
+          w: (main.W - main.P * 3) / 2,
+          h: px(24),
           text: getText('currentMileage'),
-          text_size: 18,
+          text_size: px(18),
           align_h: hmUI.align.LEFT,
           align_v: hmUI.align.BOTTOM,
           text_style: hmUI.text_style.NONE,
@@ -294,25 +304,25 @@ Page(
         let mileage = numFormat(curTrans.mileage.current)
         autoGroup.createWidget(hmUI.widget.TEXT, {
           x: main.P,
-          y: 80,
+          y: px(80),
           w: (main.W - main.P * 2) / 2,
-          h: 40,
+          h: px(40),
           text: mileage,
-          text_size: 30,
+          text_size: px(30),
           align_h: hmUI.align.LEFT,
           align_v: hmUI.align.BOTTOM,
           text_style: hmUI.text_style.NONE,
           color: COLORS.primary
         })
-        let mileageW = hmUI.getTextLayout(mileage, { text_size: 30, text_width: screenWidth }).width
-        let textP = 10
+        let mileageW = hmUI.getTextLayout(mileage, { text_size: px(30), text_width: screenWidth }).width
+        let textP = px(10)
         autoGroup.createWidget(hmUI.widget.TEXT, {
           x: main.P + mileageW + textP,
-          y: 80,
+          y: px(80),
           w: (main.W - main.P * 2) / 2,
-          h: 36,
+          h: px(36),
           text: getText('km'),
-          text_size: 20,
+          text_size: px(20),
           align_h: hmUI.align.LEFT,
           align_v: hmUI.align.BOTTOM,
           text_style: hmUI.text_style.NONE,
@@ -320,9 +330,9 @@ Page(
         })
         autoGroup.createWidget(hmUI.widget.BUTTON, {
           x: 0,
-          y: 60,
+          y: px(56),
           w: main.W / 2,
-          h: 60,
+          h: px(60),
           normal_src: '',
           press_src: '',
           longpress_func: () => {
@@ -337,12 +347,12 @@ Page(
         })
 
         autoGroup.createWidget(hmUI.widget.TEXT, {
-          x: main.W / 2 + main.P,
-          y: 60,
-          w: (main.W - main.P * 4) / 2,
-          h: 24,
+          x: (main.W + main.P) / 2,
+          y: px(56),
+          w: (main.W - main.P * 3) / 2,
+          h: px(24),
           text: getText('nextMaintenance'),
-          text_size: 18,
+          text_size: px(18),
           align_h: hmUI.align.LEFT,
           align_v: hmUI.align.BOTTOM,
           text_style: hmUI.text_style.NONE,
@@ -351,25 +361,25 @@ Page(
         let toage = parseInt(curTrans.maintenance.last) + parseInt(curTrans.maintenance.period) - parseInt(curTrans.mileage.current)
         toage = numFormat(toage < 0 ? 0 : toage)
         autoGroup.createWidget(hmUI.widget.TEXT, {
-          x: main.W / 2 + main.P,
-          y: 80,
+          x: (main.W + main.P) / 2,
+          y: px(80),
           w: (main.W - main.P * 2) / 2,
-          h: 40,
+          h: px(40),
           text: toage,
-          text_size: 30,
+          text_size: px(30),
           align_h: hmUI.align.LEFT,
           align_v: hmUI.align.BOTTOM,
           text_style: hmUI.text_style.NONE,
           color: COLORS.primary
         })
-        let toageW = hmUI.getTextLayout(toage, { text_size: 30, text_width: screenWidth }).width
+        let toageW = hmUI.getTextLayout(toage, { text_size: px(30), text_width: screenWidth }).width
         autoGroup.createWidget(hmUI.widget.TEXT, {
           x: main.W / 2 + main.P + toageW + textP,
-          y: 80,
+          y: px(80),
           w: (main.W - main.P * 2) / 2,
-          h: 36,
+          h: px(36),
           text: getText('km'),
-          text_size: 20,
+          text_size: px(20),
           align_h: hmUI.align.LEFT,
           align_v: hmUI.align.BOTTOM,
           text_style: hmUI.text_style.NONE,
@@ -377,9 +387,9 @@ Page(
         })
         autoGroup.createWidget(hmUI.widget.BUTTON, {
           x: main.W / 2,
-          y: 60,
-          w: main.W / 2,
-          h: 60,
+          y: px(56),
+          w: (main.W - main.P * 2) / 2,
+          h: px(60),
           normal_src: '',
           press_src: '',
           longpress_func: () => {
@@ -394,16 +404,17 @@ Page(
         })
 
         let blocks = []
-        let blocksY = main.Y + main.H + main.MB + 50
-        // M - margin, P - padding, W - width, H - height, B - bottom, i - icon, l - line
+        let blocksY = main.Y + main.H + main.MB + px(50)
+        // M - margin, P - padding, W - width, H - height, B - bottom, i - icon, l - line, R - radius
         const block = {
-          P: 15,
+          P: px(15),
           W: screenWidth - main.M * 2,
-          H: 130,
-          BM: 20,
-          iW: 30,
-          iM: 10,
-          lH: 20
+          H: px(130),
+          BM: px(20),
+          iW: px(30),
+          iM: px(10),
+          lH: px(20),
+          R: px(25)
         }
         block.lW = block.W - block.P * 2
 
@@ -431,7 +442,7 @@ Page(
             y: 0,
             w: block.W,
             h: block.H,
-            radius: Math.floor((screenWidth / 15) / 5) * 5,
+            radius: block.R,
             color: ratio < 0.8 ? 0x111111 : ratio >= 1 ? 0x661111 : 0x663311
           })
           groups[i].createWidget(hmUI.widget.FILL_RECT, {
@@ -461,9 +472,9 @@ Page(
             x: block.P + block.iW + block.iM,
             y: block.P * 2 + block.lH - 2,
             w: block.W - block.P * 2 - block.iW - block.iM,
-            h: 36,
+            h: px(36),
             text: getText(curTrans.details[blocks[i]].types ? curTrans.details[blocks[i]].types.arr[curTrans.details[blocks[i]].types.current] : blocks[i]),
-            text_size: 32,
+            text_size: px(32),
             align_h: hmUI.align.LEFT,
             align_v: hmUI.align.CENTER_V,
             text_style: hmUI.text_style.NONE,
@@ -474,25 +485,25 @@ Page(
           let tarText = numFormat(tar)
           groups[i].createWidget(hmUI.widget.TEXT, {
             x: block.P,
-            y: block.P * 2 + 60,
+            y: block.P * 2 + px(60),
             w: block.W - block.P * 2,
-            h: 36,
+            h: px(36),
             text: `${curText}`,
-            text_size: 32,
+            text_size: px(32),
             align_h: hmUI.align.LEFT,
             align_v: hmUI.align.BOTTOM,
             text_style: hmUI.text_style.NONE,
             color: COLORS.primary
           })
-          let textW = hmUI.getTextLayout(curText.toString(), { text_size: 32, text_width: screenWidth }).width
-          let textM = 10
+          let textW = hmUI.getTextLayout(curText.toString(), { text_size: px(32), text_width: screenWidth }).width
+          let textM = px(10)
           groups[i].createWidget(hmUI.widget.TEXT, {
             x: block.P + textW + textM,
-            y: block.P * 2 + 60,
+            y: block.P * 2 + px(60),
             w: screenWidth - (main.M + block.P) * 2 - textW - textM,
-            h: 34,
+            h: px(34),
             text: `/ ${tarText}`,
-            text_size: 24,
+            text_size: px(24),
             align_h: hmUI.align.LEFT,
             align_v: hmUI.align.BOTTOM,
             text_style: hmUI.text_style.NONE,

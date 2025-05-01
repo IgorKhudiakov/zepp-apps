@@ -28,10 +28,10 @@ Page({
       let index = currentParam ? key.vals.indexOf(currentParam) : 0
       if (isIncrement) index = index + 1 >= key.vals.length ? 0 : (index + 1)
       let val = key.vals[index]
-      let valW = hmUI.getTextLayout(`${val}`, { text_size: 40, text_width: 0 }).width
-      let suffixW = hmUI.getTextLayout(key.suffix, { text_size: 28, text_width: 0 }).width
+      let valW = hmUI.getTextLayout(`${val}`, { text_size: px(40), text_width: 0 }).width
+      let suffixW = hmUI.getTextLayout(key.suffix, { text_size: px(28), text_width: 0 }).width
       widget.setProperty(hmUI.prop.MORE, {
-        x: groups.W - suffixW - valW - 10,
+        x: groups.W - suffixW - valW - groups.RBM,
         w: valW,
         text: val
       })
@@ -59,29 +59,31 @@ Page({
       return newVal
     }
 
-    let startY = isRoundedScreen ? 50 : 20
+    let startY = px(isRoundedScreen ? 50 : 20)
     let contentH = startY
-    let M = isRoundedScreen ? 36 : 32
+    let M = px(isRoundedScreen ? 36 : 32)
 
     hmUI.createWidget(hmUI.widget.TEXT, {
       x: M,
       y: contentH,
       w: screenWidth - M * 2,
-      h: 50,
+      h: px(50),
       text: getText('settings'),
-      text_size: 32,
+      text_size: px(32),
       align_h: hmUI.align.CENTER_H,
       align_v: hmUI.align.CENTER_V,
       text_style: hmUI.text_style.WRAP
     })
 
-    contentH += 100
+    contentH += px(100)
 
     const groups = {
       X: M,
       W: screenWidth - M * 2,
-      H: 80,
-      M: 20
+      H: px(80),
+      M: px(20),
+      RBM: px(10),              // Отступ кнопки справа
+      RBW: px(96)               // Ширина кнопки справа 
     }
     let groupsData = {
       0: {
@@ -136,12 +138,12 @@ Page({
       })
       groupsArr[key].createWidget(hmUI.widget.TEXT, {
         ...SETTINGS_TEXT_PARAMS,
-        w: screenWidth - M * 2 - 110,
+        w: screenWidth - M * 2 - groups.RBW - groups.RBM,
         text: groupsData[key].text,
       })
       groupsArr[key].createWidget(hmUI.widget.TEXT, {
         ...SETTINGS_DESC_PARAMS,
-        w: screenWidth - M * 2 - 110,
+        w: screenWidth - M * 2 - groups.RBW - groups.RBM,
         text: groupsData[key].desc,
       })
       switch (groupsData[key].type) {
@@ -159,14 +161,14 @@ Page({
           break
         }
         case "number": {
-          let suffixW = hmUI.getTextLayout(groupsData[key].suffix, { text_size: 28, text_width: 0 }).width
+          let suffixW = hmUI.getTextLayout(groupsData[key].suffix, { text_size: px(28), text_width: 0 }).width
           gg[key] = groupsArr[key].createWidget(hmUI.widget.TEXT, {
             x: 0,
             y: 0,
             w: 0,
             h: groups.H,
             text: '',
-            text_size: 40,
+            text_size: px(40),
             align_h: hmUI.align.RIGHT,
             align_v: hmUI.align.CENTER_V,
             text_style: hmUI.text_style.NONE,
@@ -179,17 +181,17 @@ Page({
             w: suffixW,
             h: groups.H,
             text: groupsData[key].suffix,
-            text_size: 28,
+            text_size: px(28),
             align_h: hmUI.align.RIGHT,
             align_v: hmUI.align.CENTER_V,
             text_style: hmUI.text_style.NONE,
             color: COLORS.primary
           })
           groupsArr[key].createWidget(hmUI.widget.BUTTON, {
-            x: groups.W - 100,
+            x: groups.W - groups.RBW,
             y: 0,
-            w: px(100),
-            h: px(groups.H),
+            w: groups.RBW,
+            h: groups.H,
             normal_src: '',
             press_src: '',
             click_func: () => dataUpdate(gg[key], groupsData[key])
@@ -198,10 +200,10 @@ Page({
         }
         case "clear": {
           groupsArr[key].createWidget(hmUI.widget.BUTTON, {
-            x: groups.W - CHECKBOX.W,
-            y: (groups.H - CHECKBOX.H) / 2,
-            w: px(CHECKBOX.W),
-            h: px(CHECKBOX.H),
+            x: groups.W - groups.RBW,
+            y: (groups.H - groups.RBW) / 2,
+            w: groups.RBW,
+            h: groups.H,
             normal_src: 'image/buttons/reset.png',
             press_src: 'image/buttons/reset_gray.png',
             click_func: () => {

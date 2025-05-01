@@ -3,12 +3,13 @@ import * as hmUI from "@zos/ui"
 import { replace, push, back, exit } from "@zos/router"
 import { localStorage } from "@zos/storage"
 import { SCREEN_SHAPE_ROUND } from "@zos/device"
+import { px } from "@zos/utils"
 
 const screenWidth = getDeviceInfo().width
 
 const button = {
-    W: 96,
-    H: 96
+    W: px(96),
+    H: px(96)
 }
 export function createButtons({ UI, centerX = (screenWidth / 2), y, buttons = {} }, context) {
     const buttonsCount = Object.keys(buttons).length
@@ -63,7 +64,7 @@ export function createButtons({ UI, centerX = (screenWidth / 2), y, buttons = {}
             x: 0,
             y: y + button.H,
             w: screenWidth,
-            h: 20 * (buttonsCount - 1)
+            h: px(20) * (buttonsCount - 1)
         })
     }
 }

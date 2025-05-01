@@ -40,7 +40,11 @@ export const TRANSPORT_DETAILS_PARAMS = details
 export const COLORS = {
     primary: '0xffffff',
     secondary: '0xaaaaaa',
-    accentArray: ['0xffffff', '0xe74c3c', '0xe67e22', '0xf1c40f', '0x2ecc71', '0x1abc9c', '0x3498db', '0x9b59b6']
+    accentArray: ['ffffff', 'e74c3c', 'e67e22', 'f1c40f', '2ecc71', '1abc9c', '3498db', '9b59b6'],
+    carnum: {
+        text: ['000000', '000000', 'ffffff', 'ffffff', 'ffffff', 'ffffff'],
+        bg: ['ffffff', 'ff8800', '0033aa', '000000', 'aa3333', '006633']
+    }
 }
 
 export const NEW_TRANSPORT = {
@@ -50,8 +54,10 @@ export const NEW_TRANSPORT = {
     model: "Model",
     carnum: {
         visible: false,
-        num: "а000аа",
-        reg: "000"
+        num: "а 000 аа",
+        reg: "000",
+        format: 1,
+        color: 0
     },
     mileage: {
         current: '0',

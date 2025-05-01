@@ -12,7 +12,7 @@ export function numFormat(num) {
     return formattedNum
 }
 
-export function carNumFormat(str, type = 'auto') {
+export function carNumFormat(str, type = 'auto') { // С версии 1.1.0 не используется
     str = str.toLowerCase()
     switch (type) {
         case 'moto':
