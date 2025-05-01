@@ -70,32 +70,49 @@ AppSettingsPage({
                     })
                 )
             }
+            const formatButtonStyles = {
+                minWidth: 0,
+                width: '20px',
+                height: '20px',
+                borderRadius: '50%',
+                boxShadow: 'none',
+                display: 'block',
+                padding: '0',
+                border: '2px solid'
+            }
             const colors = []
             let colLen = COLORS.accentArray.length
             for (let c = 0; c <= colLen; c++) {
                 colors.push(
-                    Button({
-                        label: c == colLen ? '◐' : ' ',
-                        style: {
-                            minWidth: '1.5em',
-                            height: '1.5em',
-                            borderRadius: '50%',
-                            background: c == colLen ? 'transparent' : `#${COLORS.accentArray[c]}`,
-                            boxShadow: 'none',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            padding: '0',
-                            border: `2px solid ${c == colLen ? e.accent.isCustom ? '#00B9BC' : 'gray' : c < colLen && !e.accent.isCustom && e.accent.color == COLORS.accentArray[c] ? '#00B9BC' : 'transparent'}`,
-                            fontSize: '1.5em',
-                            color: 'white'
+                    View(
+                        {
+                            style: {
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                width: '2.5em',
+                                aspectRatio: '1'
+                            }
                         },
-                        onClick: () => {
-                            e.accent.isCustom = c == colLen
-                            if (c < colLen) e.accent.color = COLORS.accentArray[c]
-                            this.editTransport(i, e)
-                        }
-                    })
+                        Button({
+                            style: {
+                                minWidth: '0',
+                                aspectRatio: '1',
+                                height: c == colLen && e.accent.isCustom || c < colLen && !e.accent.isCustom && e.accent.color == COLORS.accentArray[c] ? '2.5em' : '2em',
+                                borderRadius: '50%',
+                                background: c == colLen ? 'transparent' : `#${COLORS.accentArray[c]}`,
+                                boxShadow: 'none',
+                                padding: '0',
+                                border: `2px solid ${c == colLen ? 'gray' : `#${COLORS.accentArray[c]}`}`,
+                                color: 'white'
+                            },
+                            onClick: () => {
+                                e.accent.isCustom = c == colLen
+                                if (c < colLen) e.accent.color = COLORS.accentArray[c]
+                                this.editTransport(i, e)
+                            }
+                        })
+                    )
                 )
             }
             for (const key in detailsParams) {
@@ -109,7 +126,7 @@ AppSettingsPage({
                         {
                             style: {
                                 background: "#333",
-                                borderRadius: '.5em',
+                                borderRadius: '1em',
                                 padding: '.5em .75em',
                                 display: 'flex',
                                 flexDirection: 'column',
@@ -142,7 +159,8 @@ AppSettingsPage({
                                                 justifyContent: 'center',
                                                 fontSize: "1.2em",
                                                 marginRight: ".25em",
-                                                opacity: keys.indexOf(key) == 0 ? ".5" : "1"
+                                                opacity: keys.indexOf(key) == 0 ? ".5" : "1",
+                                                flexShrink : '0'
                                             },
                                             onClick: () => {
                                                 if (keys.indexOf(key) != 0) this.changeDetailsPosition(i, e, keys.indexOf(key), true)
@@ -162,8 +180,9 @@ AppSettingsPage({
                                                 alignItems: 'center',
                                                 justifyContent: 'center',
                                                 fontSize: "1.2em",
-                                                marginRight: "1em",
-                                                opacity: keys.indexOf(key) == keys.length - 1 ? ".5" : "1"
+                                                marginRight: ".75em",
+                                                opacity: keys.indexOf(key) == keys.length - 1 ? ".5" : "1",
+                                                flexShrink : '0'
                                             },
                                             onClick: () => {
                                                 if (keys.indexOf(key) != keys.length - 1) this.changeDetailsPosition(i, e, keys.indexOf(key))
@@ -176,17 +195,33 @@ AppSettingsPage({
                                             style: {
                                                 flex: "1",
                                                 fontSize: "1.2em",
-                                                filter: "hue-rotate(204deg) saturate(4.4)"
+                                                filter: "hue-rotate(204deg) saturate(4.4)",
+                                                flexWrap: 'wrap',
+                                                display: 'flex',
+                                                gap: '.5em',
+                                                justifyContent: 'space-between',
+                                                alignItems: 'center',
+                                                marginRight: '-.5em'
                                             }
                                         },
-                                        Toggle({
-                                            label: gettext(key),
-                                            value: e.details[key].visible,
-                                            onChange: (val) => {
-                                                e.details[key].visible = val
-                                                this.editTransport(i, e)
-                                            }
-                                        })
+                                        [
+                                            View(
+                                                {
+                                                    style: {
+                                                        display: 'flex',
+                                                        flex: '1'
+                                                    }
+                                                },
+                                                gettext(key)
+                                            ),
+                                            Toggle({
+                                                value: e.details[key].visible,
+                                                onChange: (val) => {
+                                                    e.details[key].visible = val
+                                                    this.editTransport(i, e)
+                                                }
+                                            })
+                                        ]
                                     )
                                 ]
                             ),
@@ -540,7 +575,9 @@ AppSettingsPage({
                                             {
                                                 style: {
                                                     display: 'flex',
-                                                    gap: '.5em'
+                                                    gap: '.5em',
+                                                    alignItems: 'center',
+                                                    height: '2em'
                                                 }
                                             },
                                             [
@@ -552,6 +589,7 @@ AppSettingsPage({
                                                             flex: '1',
                                                             fontSize: '1.2em',
                                                             fontWeight: 'bold',
+                                                            height: '100%',
                                                             color: `#${COLORS.carnum.text[e.carnum.color]}`
                                                         }
                                                     },
@@ -585,19 +623,10 @@ AppSettingsPage({
                                                     ]
                                                 ),
                                                 Button({
-                                                    label: e.carnum.format == 1 ? '◉' : '⭘',
                                                     style: {
-                                                        height: '1.2em',
-                                                        borderRadius: '1em',
-                                                        background: 'none',
-                                                        boxShadow: 'none',
-                                                        color: e.carnum.format == 1 ? '#00B9BC' : 'gray',
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        justifyContent: 'center',
-                                                        fontSize: '1.5em',
-                                                        padding: '0',
-                                                        minWidth: '1.2em'
+                                                        ...formatButtonStyles,
+                                                        backgroundColor: e.carnum.format == 1 ? '#00B9BC' : 'transparent',
+                                                        borderColor: e.carnum.format == 1 ? '#00B9BC' : 'gray'
                                                     },
                                                     onClick: () => {
                                                         e.carnum.format = 1
@@ -610,7 +639,9 @@ AppSettingsPage({
                                             {
                                                 style: {
                                                     display: 'flex',
-                                                    gap: '.5em'
+                                                    gap: '.5em',
+                                                    alignItems: 'center',
+                                                    height: '2em'
                                                 }
                                             },
                                             [
@@ -622,6 +653,7 @@ AppSettingsPage({
                                                             flex: '1',
                                                             fontSize: '1.2em',
                                                             fontWeight: 'bold',
+                                                            height: '100%',
                                                             color: `#${COLORS.carnum.text[e.carnum.color]}`
                                                         }
                                                     },
@@ -655,19 +687,10 @@ AppSettingsPage({
                                                     ]
                                                 ),
                                                 Button({
-                                                    label: e.carnum.format == 2 ? '◉' : '⭘',
                                                     style: {
-                                                        height: '1.2em',
-                                                        borderRadius: '1em',
-                                                        background: 'none',
-                                                        boxShadow: 'none',
-                                                        color: e.carnum.format == 2 ? '#00B9BC' : 'gray',
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        justifyContent: 'center',
-                                                        fontSize: '1.5em',
-                                                        padding: '0',
-                                                        minWidth: '1.2em'
+                                                        ...formatButtonStyles,
+                                                        backgroundColor: e.carnum.format == 2 ? '#00B9BC' : 'transparent',
+                                                        borderColor: e.carnum.format == 2 ? '#00B9BC' : 'gray'
                                                     },
                                                     onClick: () => {
                                                         e.carnum.format = 2
@@ -680,7 +703,9 @@ AppSettingsPage({
                                             {
                                                 style: {
                                                     display: 'flex',
-                                                    gap: '.5em'
+                                                    gap: '.5em',
+                                                    alignItems: 'center',
+                                                    height: '2em'
                                                 }
                                             },
                                             [
@@ -692,6 +717,7 @@ AppSettingsPage({
                                                             flex: '1',
                                                             fontSize: '1.2em',
                                                             fontWeight: 'bold',
+                                                            height: '100%',
                                                             color: `#${COLORS.carnum.text[e.carnum.color]}`
                                                         }
                                                     },
@@ -712,19 +738,10 @@ AppSettingsPage({
                                                     ]
                                                 ),
                                                 Button({
-                                                    label: e.carnum.format == 3 ? '◉' : '⭘',
                                                     style: {
-                                                        height: '1.2em',
-                                                        borderRadius: '1em',
-                                                        background: 'none',
-                                                        boxShadow: 'none',
-                                                        color: e.carnum.format == 3 ? '#00B9BC' : 'gray',
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        justifyContent: 'center',
-                                                        fontSize: '1.5em',
-                                                        padding: '0',
-                                                        minWidth: '1.2em'
+                                                        ...formatButtonStyles,
+                                                        backgroundColor: e.carnum.format == 3 ? '#00B9BC' : 'transparent',
+                                                        borderColor: e.carnum.format == 3 ? '#00B9BC' : 'gray'
                                                     },
                                                     onClick: () => {
                                                         e.carnum.format = 3
@@ -988,7 +1005,6 @@ AppSettingsPage({
                                                     {
                                                         style: {
                                                             display: 'flex',
-                                                            gap: '.5em',
                                                             flexWrap: 'wrap'
                                                         }
                                                     },
