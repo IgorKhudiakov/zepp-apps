@@ -30,3 +30,10 @@
 ### Косынка классика
 #### _/Solitaire_
 Игра в классическую косынку
+
+<br>
+<img src="./Super-Tic-Tac-Toe/assets/default.r/icon.png" alt="image" width="100" height="auto">
+
+### Косынка классика
+#### _/Super-Tic-Tac-Toe_
+Игра в супер-крестики-нолики
