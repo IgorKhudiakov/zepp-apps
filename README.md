@@ -34,6 +34,6 @@
 <br>
 <img src="./Super-Tic-Tac-Toe/assets/default.r/icon.png" alt="image" width="100" height="auto">
 
-### Косынка классика
+### Супер крестики-нолики
 #### _/Super-Tic-Tac-Toe_
-Игра в супер-крестики-нолики
+Игра в супер крестики-нолики
