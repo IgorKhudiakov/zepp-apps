@@ -30,3 +30,10 @@ An application for creating and previewing color schemes on your device
 ### Solitaire Classic
 #### _/Solitaire_
 Classic Klondike Solitaire game
+
+<br>
+<img src="./Super-Tic-Tac-Toe/assets/default.r/icon.png" alt="image" width="100" height="auto">
+
+### Super Tic-Tac-Toe
+#### _/Super-Tic-Tac-Toe_
+Super Tic-Tac-Toe Game
