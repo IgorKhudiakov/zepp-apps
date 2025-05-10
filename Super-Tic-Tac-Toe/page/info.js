@@ -35,7 +35,7 @@ Page({
         w: SCREEN_WIDTH - M * 2,
         h: px(50),
         text: getText(infoParams[i]),
-        text_size: px(20),
+        text_size: px(24),
         align_h: align.LEFT,
         align_v: align.CENTER_V,
         text_style: text_style.WRAP,
@@ -63,21 +63,21 @@ Page({
           bg_h: px(180),
           bg_radius: px(10)
         })
-        contentH += px(240)
+        contentH += px(250)
       } else {
         createWidget(widget.TEXT, {
           x: M,
-          y: contentH + px(30),
+          y: contentH + px(40),
           w: SCREEN_WIDTH - M * 2,
           h: px(50),
           text: infoParams[i] == 'tglink' ? '@igorkhudiakov' : infoParams[i] == 'email' ? 'khudiakov.i.v@gmail.com' : packageInfo[infoParams[i]],
-          text_size: px(24),
+          text_size: px(32),
           align_h: align.LEFT,
           align_v: align.CENTER_V,
           text_style: text_style.WRAP,
           color: COLORS.primary
         })
-        contentH += px(80)
+        contentH += px(90)
       }
     }
     createSpace({ y: contentH, h: px(isRound ? 100 : 20) })
