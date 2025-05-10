@@ -510,8 +510,8 @@ export class Table {
     this.drawable[i][j].draw()
     localStorage.setItem('prevstep', prevStep)
     this.saveMark(prevStep.player, i, j)
-    this.checkDone(prevStep.player)
-    if (settings?.autoBack) back()
+    let isDone = this.checkDone(prevStep.player)
+    if (!this.isMain && !isDone && settings?.autoBack) back()
   }
 
   getSize() {
@@ -524,6 +524,8 @@ export class Table {
         this.buttons.forEach((row) => row.forEach((button) => deleteWidget(button)))
         showVictory(prevPlayer)
       } else back()
+      return true
     }
+    return false
   }
 }
