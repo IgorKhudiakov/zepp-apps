@@ -1,0 +1,58 @@
+{
+  "configVersion": "v3",
+  "app": {
+    "appId": 1081834,
+    "appName": "Orbix",
+    "appType": "app",
+    "version": {
+      "code": 1,
+      "name": "1.0.0"
+    },
+    "icon": "icon.png",
+    "vender": "Igor Khudiakov",
+    "description": "Orbix game"
+  },
+  "permissions": [
+    "data:os.device.info",
+    "device:os.local_storage"
+  ],
+  "runtime": {
+    "apiVersion": {
+      "compatible": "3.0.0",
+      "target": "3.0.0",
+      "minVersion": "3.0"
+    }
+  },
+  "targets": {
+    "default": {
+      "module": {
+        "page": {
+          "pages": [
+            "page/index",
+            "page/faq",
+            "page/info"
+          ]
+        }
+      },
+      "platforms": [
+        {
+          "st": "r",
+          "dw": 480
+        },
+        {
+          "st": "s",
+          "dw": 390
+        }
+      ]
+    }
+  },
+  "i18n": {
+    "en-US": {
+      "appName": "Orbix"
+    },
+    "ru-RU": {
+      "appName": "Орбикс"
+    }
+  },
+  "defaultLanguage": "en-US"
+}

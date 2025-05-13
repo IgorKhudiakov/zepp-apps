@@ -213,7 +213,7 @@ export class Menu {
       x: 0,
       y: 0,
       w: SCREEN_WIDTH,
-      h: this.H
+      h: this.H <= SCREEN_HEIGHT ? SCREEN_HEIGHT : this.H
     })
 
     this.group.setProperty(prop.ANIM, {
