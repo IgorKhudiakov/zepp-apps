@@ -1,4 +1,4 @@
-import * as hmUI from "@zos/ui"
+import hmUI, { align, createWidget, setStatusBarVisible, text_style, widget } from "@zos/ui"
 import { getText } from "@zos/i18n"
 import { getDeviceInfo, SCREEN_SHAPE_ROUND } from "@zos/device"
 import { getPackageInfo } from '@zos/app'
@@ -7,24 +7,22 @@ import { px } from "@zos/utils"
 import { COLORS } from "../utils/constants"
 import { createButtons } from "../utils/functions"
 
-const { screenShape } = getDeviceInfo()
-const screenWidth = getDeviceInfo().width
-const screenHeight = getDeviceInfo().height
-const isRoundedScreen = screenShape == SCREEN_SHAPE_ROUND
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT, screenShape } = getDeviceInfo()
+const isRound = screenShape == SCREEN_SHAPE_ROUND
 
 Page({
   onInit() {
-    hmUI.setStatusBarVisible(false)
+    setStatusBarVisible(false)
     let infoParams = ['name', 'version', 'vender', 'tglink', 'gmail', 'description', 'donate']
 
-    let startY = px(isRoundedScreen ? 50 : 20)
+    let startY = px(isRound ? 50 : 20)
     let contentH = startY
-    let M = px(isRoundedScreen ? 36 : 32)
+    let M = px(isRound ? 36 : 32)
 
-    hmUI.createWidget(hmUI.widget.TEXT, {
+    createWidget(hmUI.widget.TEXT, {
       x: M,
       y: contentH,
-      w: screenWidth - M * 2,
+      w: SCREEN_WIDTH - M * 2,
       h: px(50),
       text: getText('appinfo'),
       text_size: px(32),
@@ -37,16 +35,16 @@ Page({
 
     const packageInfo = getPackageInfo()
     for (let i = 0; i < infoParams.length; i++) {
-      hmUI.createWidget(hmUI.widget.TEXT, {
+      createWidget(widget.TEXT, {
         x: M,
         y: contentH,
-        w: screenWidth - M * 2,
+        w: SCREEN_WIDTH - M * 2,
         h: px(50),
         text: getText(infoParams[i]),
-        text_size: px(20),
-        align_h: hmUI.align.LEFT,
-        align_v: hmUI.align.CENTER_V,
-        text_style: hmUI.text_style.WRAP,
+        text_size: px(24),
+        align_h: align.LEFT,
+        align_v: align.CENTER_V,
+        text_style: text_style.WRAP,
         color: COLORS.secondary
       })
       if (infoParams[i] == 'donate') {
@@ -67,7 +65,7 @@ Page({
           default:
             break
         }
-        hmUI.createWidget(hmUI.widget.QRCODE, {
+        createWidget(widget.QRCODE, {
           content: link,
           x: M + px(10),
           y: contentH + px(60),
@@ -81,19 +79,19 @@ Page({
         })
         contentH += px(240)
       } else {
-        hmUI.createWidget(hmUI.widget.TEXT, {
+        createWidget(widget.TEXT, {
           x: M,
-          y: contentH + px(30),
-          w: screenWidth - M * 2,
+          y: contentH + px(35),
+          w: SCREEN_WIDTH - M * 2,
           h: px(50),
           text: infoParams[i] == 'tglink' ? '@igorkhudiakov' : infoParams[i] == 'gmail' ? 'khudiakov.i.v@gmail.com' : packageInfo[infoParams[i]],
-          text_size: px(24),
-          align_h: hmUI.align.LEFT,
-          align_v: hmUI.align.CENTER_V,
-          text_style: hmUI.text_style.WRAP,
+          text_size: px(32),
+          align_h: align.LEFT,
+          align_v: align.CENTER_V,
+          text_style: text_style.WRAP,
           color: COLORS.primary
         })
-        contentH += px(80)
+        contentH += px(85)
       }
     }
 
@@ -101,4 +99,4 @@ Page({
   },
   build() { },
   onDestroy() { },
-});
+})

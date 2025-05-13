@@ -23,6 +23,7 @@ AppSideService(
     },
     onCall(req) {
       if (req.method === "SAVE_TRANSPORT") settingsLib.setItem('transport', JSON.stringify(req.params))
+      else if (req.method === "SAVE_SETTINGS") settingsLib.setItem('settings', JSON.stringify(req.params))
     },
     onSettingsChange({ key, newValue, oldValue }) {
       if (key == "transport") {

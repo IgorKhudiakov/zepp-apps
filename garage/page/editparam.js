@@ -1,18 +1,16 @@
 import { BasePage } from '@zeppos/zml/base-page'
-import * as hmUI from "@zos/ui"
+import hmUI, { align, createWidget, prop, setStatusBarVisible, text_style, widget } from "@zos/ui"
 import { getDeviceInfo, SCREEN_SHAPE_ROUND } from "@zos/device"
 import { localStorage } from "@zos/storage"
 import { replace } from "@zos/router"
-import { px } from '@zos/utils'
+import { px } from "@zos/utils"
 
 import { COLORS } from "../utils/constants"
 import { numFormat } from "../utils/formatter"
-import { createButtons } from '../utils/functions'
+import { createButtons } from "../utils/functions"
 
-const { screenShape } = getDeviceInfo()
-const screenWidth = getDeviceInfo().width
-const screenHeight = getDeviceInfo().height
-const isRoundedScreen = screenShape == SCREEN_SHAPE_ROUND
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT, screenShape } = getDeviceInfo()
+const isRound = screenShape == SCREEN_SHAPE_ROUND
 
 Page(
   BasePage({
@@ -49,39 +47,39 @@ Page(
       })
     },
     onInit(data) {
-      hmUI.setStatusBarVisible(false)
+      setStatusBarVisible(false)
       data = JSON.parse(data)
-      let startY = px(isRoundedScreen ? 50 : 10)
-      let M = px(isRoundedScreen ? 50 : 10)
+      let startY = px(isRound ? 50 : 10)
+      let M = px(isRound ? 50 : 10)
 
-      hmUI.createWidget(hmUI.widget.TEXT, {
+      createWidget(widget.TEXT, {
         x: M,
         y: startY,
-        w: screenWidth - px(isRoundedScreen ? 100 : 20),
+        w: SCREEN_WIDTH - px(isRound ? 100 : 20),
         h: px(30),
         text: data.text,
         text_size: px(20),
-        align_h: hmUI.align.CENTER_H,
-        align_v: hmUI.align.CENTER_V,
-        text_style: hmUI.text_style.NONE,
+        align_h: align.CENTER_H,
+        align_v: align.CENTER_V,
+        text_style: text_style.NONE,
         color: COLORS.secondary
       })
-      const text = hmUI.createWidget(hmUI.widget.TEXT, {
+      const text = createWidget(widget.TEXT, {
         x: M,
         y: startY + px(40),
-        w: screenWidth - px(isRoundedScreen ? 100 : 20),
+        w: SCREEN_WIDTH - px(isRound ? 100 : 20),
         h: px(50),
         text: numFormat(data.value.toString()),
         text_size: px(40),
-        align_h: hmUI.align.CENTER_H,
-        align_v: hmUI.align.CENTER_V,
+        align_h: align.CENTER_H,
+        align_v: align.CENTER_V,
         color: COLORS.primary
       })
 
       const keyboard = {
         X: M,
         Y: startY + px(100),
-        W: screenWidth - px(isRoundedScreen ? 100 : 20),
+        W: SCREEN_WIDTH - px(isRound ? 100 : 20),
         keys: [
           [1, 2, 3, 'backspace'],
           [4, 5, 6, 0],
@@ -115,7 +113,7 @@ Page(
               press_color: 0x666666,
             }
           if (Number.isNaN(parseInt(keyboard.keys[i][k]))) {
-            hmUI.createWidget(hmUI.widget.FILL_RECT, {
+            createWidget(widget.FILL_RECT, {
               x: key.X + (key.W + key.MR) * k,
               y: key.Y + (key.H + key.MB) * i,
               w: key.W,
@@ -124,7 +122,7 @@ Page(
               color: 0x333333,
             })
           }
-          hmUI.createWidget(hmUI.widget.BUTTON, {
+          createWidget(widget.BUTTON, {
             x: key.X + (key.W + key.MR) * k,
             y: key.Y + (key.H + key.MB) * i,
             w: key.W,
@@ -135,7 +133,7 @@ Page(
               if (keyboard.keys[i][k] == 'apply') this.saveValue(data)
               else {
                 data.value = this.editValue(data.value, keyboard.keys[i][k])
-                text.setProperty(hmUI.prop.TEXT, numFormat(data.value))
+                text.setProperty(prop.TEXT, numFormat(data.value))
               }
             }
           })

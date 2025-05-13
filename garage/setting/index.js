@@ -6,7 +6,8 @@ import { validator } from "../utils/formatter"
 AppSettingsPage({
     data: {
         transport: [],
-        props: {}
+        props: {},
+        settings: {}
     },
     toast: {
         show: false,
@@ -28,6 +29,7 @@ AppSettingsPage({
         this.data.props = props
         var transData = props.settingsStorage.getItem('tempdata') ?? props.settingsStorage.getItem('transport')
         if (transData) this.data.transport = JSON.parse(transData)
+        this.data.settings = JSON.parse(props.settingsStorage.getItem('settings')) ?? {}
     },
     editTransport(index, data) {
         this.data.transport[index] = data
@@ -305,7 +307,7 @@ AppSettingsPage({
                                                             this.editTransport(i, e)
                                                         }
                                                     }),
-                                                    gettext('km')
+                                                gettext(this.data.settings?.measure ?? 'km')
                                                 ]
                                             )
                                         ]
@@ -346,7 +348,7 @@ AppSettingsPage({
                                                             this.editTransport(i, e)
                                                         }
                                                     }),
-                                                    gettext('km')
+                                                gettext(this.data.settings?.measure ?? 'km')
                                                 ]
                                             )
                                         ]
@@ -805,7 +807,7 @@ AppSettingsPage({
                                                         this.editTransport(i, e)
                                                     }
                                                 }),
-                                                gettext('km')
+                                                gettext(this.data.settings?.measure ?? 'km')
                                             ]
                                         )
                                     ]
@@ -863,7 +865,7 @@ AppSettingsPage({
                                                         this.editTransport(i, e)
                                                     }
                                                 }),
-                                                gettext('km')
+                                                gettext(this.data.settings?.measure ?? 'km')
                                             ]
                                         )
                                     ]
@@ -919,7 +921,7 @@ AppSettingsPage({
                                                         this.editTransport(i, e)
                                                     }
                                                 }),
-                                                gettext('km')
+                                                gettext(this.data.settings?.measure ?? 'km')
                                             ]
                                         )
                                     ]
@@ -960,7 +962,7 @@ AppSettingsPage({
                                                         this.editTransport(i, e)
                                                     }
                                                 }),
-                                                gettext('km')
+                                                gettext(this.data.settings?.measure ?? 'km')
                                             ]
                                         )
                                     ]
