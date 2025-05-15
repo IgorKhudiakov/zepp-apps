@@ -37,3 +37,17 @@ Classic Klondike Solitaire game
 ### Super Tic-Tac-Toe
 #### _/Super-Tic-Tac-Toe_
 Super Tic-Tac-Toe Game
+
+<br>
+<img src="./Orbix/assets/default.r/icon.png" alt="image" width="100" height="auto">
+
+### Orbix
+#### _/Orbix_
+A game in which you need to achieve the position of 4 chips in a row
+
+<br>
+<img src="./Shift/assets/default.r/icon.png" alt="image" width="100" height="auto">
+
+### Shift
+#### _/Shift_
+An application for building a work schedule and setting alarms according to the schedule

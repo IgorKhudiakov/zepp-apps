@@ -37,3 +37,17 @@
 ### Супер крестики-нолики
 #### _/Super-Tic-Tac-Toe_
 Игра в супер крестики-нолики
+
+<br>
+<img src="./Orbix/assets/default.r/icon.png" alt="image" width="100" height="auto">
+
+### Орбикс
+#### _/Orbix_
+Игра, в которой нужно добиться положения 4 фишек в ряд
+
+<br>
+<img src="./Shift/assets/default.r/icon.png" alt="image" width="100" height="auto">
+
+### Смена
+#### _/Shift_
+Приложение для построения рабочего графика и постановки будильников в соответствии с графиком

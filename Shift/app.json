@@ -1,0 +1,74 @@
+{
+  "configVersion": "v3",
+  "app": {
+    "appId": 1081104,
+    "appName": "Shift",
+    "appType": "app",
+    "version": {
+      "code": 80,
+      "name": "0.8.0 beta"
+    },
+    "icon": "icon.png",
+    "vender": "Igor Khudiakov",
+    "description": "Shift application"
+  },
+  "permissions": [
+    "data:os.device.info",
+    "device:os.local_storage"
+  ],
+  "runtime": {
+    "apiVersion": {
+      "compatible": "3.0.0",
+      "target": "3.0.0",
+      "minVersion": "3.0"
+    }
+  },
+  "targets": {
+    "default": {
+      "module": {
+        "page": {
+          "pages": [
+            "page/index",
+            "page/shift",
+            "page/shifts",
+            "page/picker",
+            "page/alarms",
+            "page/settings",
+            "page/info"
+          ]
+        },
+        "app-widget": {
+          "widgets": [
+            {
+              "path": "app-widget/index",
+              "icon": "icon.png",
+              "name": "widget-demo",
+              "runtime": {
+                "type": "js"
+              }
+            }
+          ]
+        }
+      },
+      "platforms": [
+        {
+          "st": "r",
+          "dw": 480
+        },
+        {
+          "st": "s",
+          "dw": 390
+        }
+      ]
+    }
+  },
+  "i18n": {
+    "en-US": {
+      "appName": "Shift"
+    },
+    "ru-RU": {
+      "appName": "Смена"
+    }
+  },
+  "defaultLanguage": "en-US"
+}
