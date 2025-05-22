@@ -1,0 +1,58 @@
+{
+  "configVersion": "v3",
+  "app": {
+    "appId": 1082310,
+    "appName": "Sudoku Classic",
+    "appType": "app",
+    "version": {
+      "code": 100,
+      "name": "1.0.0"
+    },
+    "icon": "icon.png",
+    "vender": "Igor Khudiakov",
+    "description": "Sudoku game"
+  },
+  "permissions": [
+    "data:os.device.info",
+    "device:os.local_storage"
+  ],
+  "runtime": {
+    "apiVersion": {
+      "compatible": "3.0.0",
+      "target": "3.0.0",
+      "minVersion": "3.0"
+    }
+  },
+  "targets": {
+    "default": {
+      "module": {
+        "page": {
+          "pages": [
+            "page/index",
+            "page/choosen",
+            "page/info"
+          ]
+        }
+      },
+      "platforms": [
+        {
+          "st": "r",
+          "dw": 480
+        },
+        {
+          "st": "s",
+          "dw": 390
+        }
+      ]
+    }
+  },
+  "i18n": {
+    "en-US": {
+      "appName": "Sudoku Classic"
+    },
+    "ru-RU": {
+      "appName": "Судоку классика"
+    }
+  },
+  "defaultLanguage": "en-US"
+}
