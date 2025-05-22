@@ -99,8 +99,13 @@ export function createCheckBox({ UI = hmUI, x, y, param }) {
   checkboxGroup.addEventListener(event.CLICK_DOWN, () => {
     bool = !bool
     checkboxBg.setProperty(prop.COLOR, bool ? checkbox.bg.onColor : checkbox.bg.offColor)
-    checkboxFg.setProperty(prop.X, bool ? checkbox.fg.xOn : checkbox.fg.xOff)
-    checkboxFg.setProperty(prop.COLOR, bool ? checkbox.fg.onColor : checkbox.fg.offColor)
+    checkboxFg.setProperty(prop.MORE, {
+      x: bool ? checkbox.fg.xOn : checkbox.fg.xOff,
+      y: checkbox.fg.Y,
+      w: checkbox.fg.W,
+      h: checkbox.fg.H,
+      color: bool ? checkbox.fg.onColor : checkbox.fg.offColor
+    })
     settings[param] = bool
     localStorage.setItem('settings', settings)
   })
@@ -310,14 +315,14 @@ export function showVictory(winners) {
       radius: Math.floor(victoryMarkSize / 2),
       color: COLORS.marks.white
     })
-      victoryGroup.createWidget(widget.FILL_RECT, {
-        x: SCREEN_WIDTH / 2 - Math.floor(victoryMarkSize / 5) + px(5),
-        y: SCREEN_HEIGHT / 2 - victoryMarkSize + px(5),
-        w: victoryMarkSize - px(10),
-        h: victoryMarkSize - px(10),
-        radius: Math.floor((victoryMarkSize - px(10)) / 2),
-        color: COLORS.marks.black
-      })
+    victoryGroup.createWidget(widget.FILL_RECT, {
+      x: SCREEN_WIDTH / 2 - Math.floor(victoryMarkSize / 5) + px(5),
+      y: SCREEN_HEIGHT / 2 - victoryMarkSize + px(5),
+      w: victoryMarkSize - px(10),
+      h: victoryMarkSize - px(10),
+      radius: Math.floor((victoryMarkSize - px(10)) / 2),
+      color: COLORS.marks.black
+    })
     victoryGroup.createWidget(widget.TEXT, {
       x: (SCREEN_WIDTH - px(300)) / 2,
       y: SCREEN_HEIGHT / 2 + px(20),
