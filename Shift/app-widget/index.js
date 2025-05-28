@@ -1,10 +1,10 @@
-import { createWidget, widget, prop, setAppWidgetSize, getAppWidgetSize } from '@zos/ui'
+import { createWidget, widget, prop, setAppWidgetSize, getAppWidgetSize, align, text_style } from '@zos/ui'
 import { getText } from '@zos/i18n'
 import { push } from '@zos/router'
-
-import { COLORS, CONTENT, getNearAlarm, getNearShift, getShiftFormatted } from '../utils/constants'
 import { px } from '@zos/utils'
 import { localStorage } from '@zos/storage'
+
+import { COLORS, CONTENT, getNearAlarm, getNearShift, getShiftFormatted } from '../utils/constants'
 
 const card = {
   X: getAppWidgetSize().margin,
@@ -30,6 +30,7 @@ let bg = {}
 AppWidget({
   updateNears() {
     let shift = localStorage.getItem('shift', false)
+    if (!shift) return
     let shiftsIsNotNull = Object.keys(shift?.shifts).length
     let nearShift = getNearShift(shift, 100)
     data.nearShift.setProperty(prop.TEXT, shiftsIsNotNull
@@ -77,7 +78,7 @@ AppWidget({
       w: card.W - 2 * card.P - openButton.W - openButton.M,
       h: px(40),
       text_size: px(28),
-      text: '',
+      text: getText('emptyShift'),
       color: COLORS.primary
     })
     card.H += px(50)
@@ -99,7 +100,7 @@ AppWidget({
       w: card.W - 2 * card.P - openButton.W - openButton.M,
       h: px(40),
       text_size: px(28),
-      text: '',
+      text: getText("alarmsEmptyText"),
       color: COLORS.primary
     })
     card.H += px(40)

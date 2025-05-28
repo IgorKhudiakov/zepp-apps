@@ -109,7 +109,7 @@ Page({
         color: COLORS.secondary,
         align_v: align.CENTER_V
       })
-      createCheckBox({ x: content.M + content.W - content.P - checkbox.W, y: content.Y + listItemsH + listItemH }, val.alarm, 'isOn')
+      createCheckBox({ x: content.M + content.W - content.P - checkbox.W, y: content.Y + listItemsH + listItemH, object: val.alarm, param: 'isOn' })
       listItemH += px(50)
       list[i].createWidget(widget.TEXT, {
         x: content.P,
@@ -139,7 +139,7 @@ Page({
         color: COLORS.secondary,
         align_v: align.CENTER_V
       })
-      createCheckBox({ x: content.M + content.W - content.P - checkbox.W, y: content.Y + listItemsH + listItemH }, val.alarm.time, 'prevDay')
+      createCheckBox({ x: content.M + content.W - content.P - checkbox.W, y: content.Y + listItemsH + listItemH, object: val.alarm.time, param: 'prevDay' })
       list[i].createWidget(widget.TEXT, {
         x: content.W / 2,
         y: listItemH + px(40),
@@ -184,7 +184,7 @@ Page({
         color: COLORS.secondary,
         align_v: align.CENTER_V
       })
-      createCheckBox({ x: content.M + content.W - content.P - checkbox.W, y: content.Y + listItemsH + listItemH }, val.alarm.vibro, 'isOn')
+      createCheckBox({ x: content.M + content.W - content.P - checkbox.W, y: content.Y + listItemsH + listItemH, object: val.alarm.vibro, param: 'isOn' })
       list[i].createWidget(widget.TEXT, {
         x: content.W / 2,
         y: listItemH + px(40),
@@ -237,7 +237,7 @@ Page({
           color: COLORS.secondary,
           align_v: align.CENTER_V
         })
-        createCheckBox({ x: content.M + content.W - content.P - checkbox.W, y: content.Y + listItemsH + listItemH }, val.alarm.sound, 'isOn')
+        createCheckBox({ x: content.M + content.W - content.P - checkbox.W, y: content.Y + listItemsH + listItemH, object: val.alarm.sound, param: 'isOn' })
         list[i].createWidget(widget.TEXT, {
           x: content.W / 2,
           y: listItemH + px(40),

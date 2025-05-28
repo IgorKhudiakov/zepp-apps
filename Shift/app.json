@@ -5,8 +5,8 @@
     "appName": "Shift",
     "appType": "app",
     "version": {
-      "code": 80,
-      "name": "0.8.0 beta"
+      "code": 81,
+      "name": "0.8.1 beta"
     },
     "icon": "icon.png",
     "vender": "Igor Khudiakov",

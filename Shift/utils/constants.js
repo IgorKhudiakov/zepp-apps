@@ -3,12 +3,10 @@ import { getText } from "@zos/i18n"
 import { createModal, MODAL_CONFIRM } from "@zos/interaction"
 import { Time, Vibrator, VIBRATOR_SCENE_CALL, VIBRATOR_SCENE_STRONG_REMINDER, VIBRATOR_SCENE_TIMER } from "@zos/sensor"
 import { DATE_FORMAT_MDY, DATE_FORMAT_YMD, getDateFormat, getLanguage, getTimeFormat, TIME_FORMAT_12 } from "@zos/settings"
-import { localStorage } from "@zos/storage"
 import hmUI, { align, createWidget, deleteWidget, event, prop, text_style, widget } from "@zos/ui"
 import { px } from "@zos/utils"
 
 const time = new Time()
-let settings = localStorage.getItem('settings', {})
 
 export const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT, screenShape, deviceSource } = getDeviceInfo()
 export const isRound = screenShape == SCREEN_SHAPE_ROUND
@@ -110,9 +108,7 @@ export const CONTENT = {
  * @returns 
  */
 export function getDayNumber(day, month, year) {
-  let time = new Date(year, month - 1, day)
-  let count = Math.floor(time / (1000 * 60 * 60 * 24))
-  return count
+  return Math.floor(new Date(Date.UTC(year, month - 1, day)) / (1000 * 60 * 60 * 24))
 }
 
 /**
@@ -180,14 +176,7 @@ export function getFirstWeekDay() {
  * @returns 
  */
 export function getWeekDay(day, month, year) {
-  if (month > 2) {
-    month -= 2
-  } else {
-    month += 10
-    year--
-  }
-  return (day + Math.floor((13 * month - 1) / 5) + year + Math.floor(year / 4)
-    + Math.floor(year / 400) - Math.floor(year / 100)) % 7
+  return new Date(year, month - 1, day).getDay()
 }
 
 /**
@@ -197,7 +186,7 @@ export function getWeekDay(day, month, year) {
  * @returns 
  */
 export function getMonthLength(month, year) {
-  return month == 2 ? (year % 4 == 0 ? 29 : 28) : [1, 3, 5, 7, 8, 10, 12].indexOf(month) >= 0 ? 31 : 30
+  return month == 2 ? (year % 4 == 0 ? 29 : 28) : [1, 3, 5, 7, 8, 10, 12].indexOf(month) < 0 ? 30 : 31
 }
 
 /**
@@ -285,7 +274,7 @@ export function getNearShift(shift, count = 30) {
   let nearShift = {}
   let shiftScheme = getShiftScheme(shift)
   let firstShiftDay = getFirstShiftDay(shift)
-  let startDay = getDayNumber(time.getDate(), time.getMonth(), time.getFullYear())
+  let startDay = getDayNumber(time.getDate(), time.getMonth(), time.getFullYear(), true)
   if (time.getHours() >= 21) startDay++
   for (let i = 0; i < count; i++) {
     let dayInfo = getDayInfo(shiftScheme, firstShiftDay, startDay + i)
@@ -330,8 +319,8 @@ checkbox.fg.xOn = checkbox.W - (checkbox.H - checkbox.fg.H) / 2 - checkbox.fg.W
 checkbox.fg.Y = (checkbox.H - checkbox.fg.H) / 2
 checkbox.fg.offColor = checkbox.fg?.offColor ?? checkbox.fg.onColor
 
-export function createCheckBox({ UI = hmUI, x, y, param }) {
-  let bool = !!settings[param]
+export function createCheckBox({ UI = hmUI, x, y, object, param }) {
+  let bool = !!object[param]
   const checkboxGroup = UI.createWidget(widget.GROUP, {
     x: x,
     y: y,
@@ -364,8 +353,7 @@ export function createCheckBox({ UI = hmUI, x, y, param }) {
       h: checkbox.fg.H,
       color: bool ? checkbox.fg.onColor : checkbox.fg.offColor
     })
-    settings[param] = bool
-    localStorage.setItem('settings', settings)
+    object[param] = bool
   })
 }
 
@@ -400,7 +388,7 @@ export class Keyboard {
     this.keySize = key
     this.group = {}
     this.isShift = false
-    this.lang = keyLangs.indexOf(getLanguage()) >= 0 ? getLanguage : 2 // проверь, будет ли английский по умолчанию
+    this.lang = keyLangs.indexOf(`${getLanguage()}`) >= 0 ? getLanguage() : 2
     this.keys = []
     this.drawableKeys = []
     this.bg = createWidget(widget.FILL_RECT, {

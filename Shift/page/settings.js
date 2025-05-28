@@ -50,9 +50,12 @@ Page({
       align_v: align.CENTER_V,
       color: COLORS.secondary
     })
-    createCheckBox({ x: SCREEN_WIDTH - M - checkbox.W, y: content.H + px(5), param: 'hideInactive' })
+    createCheckBox({ x: SCREEN_WIDTH - M - checkbox.W, y: content.H + px(5), object: settings, param: 'hideInactive' })
     content.H += px(65)
 
     createSpace({ y: content.H, h: px(isRound ? 150 : 20) })
+  },
+  onDestroy() {
+    localStorage.setItem('settings', settings)
   }
 })

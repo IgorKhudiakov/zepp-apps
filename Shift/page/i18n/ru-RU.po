@@ -175,6 +175,8 @@ msgid "alarm"
 msgstr "Будильник"
 
 Виджет
+msgid "emptyShift"
+msgstr "Добавьте смену в приложении"
 msgid "widgetNearShift"
 msgstr "Ближайшая смена"
 msgid "widgetNearAlarm"

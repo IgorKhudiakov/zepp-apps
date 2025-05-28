@@ -175,6 +175,8 @@ msgid "alarm"
 msgstr "Alarm"
 
 Widget
+msgid "emptyShift"
+msgstr "Add a shift in the app"
 msgid "widgetNearShift"
 msgstr "Near Shift"
 msgid "widgetNearAlarm"
